@@ -1,4 +1,4 @@
-use crate::structures::counter::Counter;
+use crate::{structures::counter::Counter, utils::file::read_file};
 
 use super::Day;
 
@@ -6,16 +6,8 @@ use super::Day;
 pub struct Day1 {}
 
 impl Day1 {
-    fn read_file(&self, path: String) -> Vec<String> {
-        std::fs::read_to_string(path)
-            .unwrap()
-            .split("\n")
-            .map(|s| s.to_string())
-            .collect()
-    }
-
     fn get_data(&self, path: String) -> (Vec<i32>, Vec<i32>) {
-        let data = self.read_file(path);
+        let data = read_file(path);
 
         let (d1, d2): (Vec<_>, Vec<_>) = data
             .into_iter()
@@ -56,17 +48,4 @@ impl Day for Day1 {
     }
 }
 
-#[cfg(test)]
-pub mod tests {
-    use super::*;
-    #[test]
-    fn test_part1() {
-        let day = Day1 {};
-        assert_eq!(day.part1("inputs/d1.test".into()), "11");
-    }
-    #[test]
-    fn test_part2() {
-        let day = Day1 {};
-        assert_eq!(day.part2("inputs/d1.test".into()), "31");
-    }
-}
+generate_day_tests!(1, "11", "31");

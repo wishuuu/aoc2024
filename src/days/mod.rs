@@ -1,10 +1,14 @@
 use std::collections::HashMap;
 
+#[macro_use]
+pub mod macros;
+
 pub mod day1;
+pub mod day2;
 
 pub trait Day {
     fn part1(&self, input_path: String) -> String;
-    fn part2(&self, intpu_path: String) -> String;
+    fn part2(&self, input_path: String) -> String;
 }
 
 pub struct Runner {
@@ -15,34 +19,10 @@ impl Runner {
     pub fn new() -> Self {
         Self {
             days: [
-                (1u8, day1::Day1 {}),
-                // (2, Box::new(day1::Day2 {})),
-                // (3, Box::new(day1::Day3 {})),
-                // (4, Box::new(day1::Day4 {})),
-                // (5, Box::new(day1::Day5 {})),
-                // (6, Box::new(day1::Day6 {})),
-                // (7, Box::new(day1::Day7 {})),
-                // (8, Box::new(day1::Day8 {})),
-                // (9, Box::new(day1::Day9 {})),
-                // (10, Box::new(day1::Day10 {})),
-                // (11, Box::new(day1::Day11 {})),
-                // (12, Box::new(day1::Day12 {})),
-                // (13, Box::new(day1::Day13 {})),
-                // (14, Box::new(day1::Day14 {})),
-                // (15, Box::new(day1::Day15 {})),
-                // (16, Box::new(day1::Day16 {})),
-                // (17, Box::new(day1::Day17 {})),
-                // (18, Box::new(day1::Day18 {})),
-                // (19, Box::new(day1::Day19 {})),
-                // (20, Box::new(day1::Day20 {})),
-                // (21, Box::new(day1::Day21 {})),
-                // (22, Box::new(day1::Day22 {})),
-                // (23, Box::new(day1::Day23 {})),
-                // (24, Box::new(day1::Day24 {})),
-                // (25, Box::new(day1::Day25 {})),
+                (1u8, Box::new(day1::Day1 {}) as Box<dyn Day>),
+                (2u8, Box::new(day2::Day2 {}) as Box<dyn Day>),
             ]
-            .iter()
-            .map(|(key, day)| (*key, Box::new(*day) as Box<dyn Day>))
+            .into_iter()
             .collect(),
         }
     }
@@ -57,15 +37,15 @@ impl Runner {
         self.run_day_part(day, 2);
     }
 
-    pub fn run_day_part(&self, day: u8, part: u8) {
-        if let Some(day) = self.days.get(&day) {
+    pub fn run_day_part(&self, d: u8, part: u8) {
+        if let Some(day) = self.days.get(&d) {
             match part {
-                1 => println!("Part 1: {}", day.part1("inputs/d1.task".into())),
-                2 => println!("Part 2: {}", day.part2("inputs/d1.task".into())),
+                1 => println!("Part 1: {}", day.part1(format!("inputs/d{}.task", d))),
+                2 => println!("Part 2: {}", day.part2(format!("inputs/d{}.task", d))),
                 _ => println!("Invalid part number"),
             }
         } else {
-            println!("Day {} not found", day);
+            println!("Day {} not found", d);
         }
     }
 }
