@@ -13,7 +13,7 @@ impl Day1 {
             .into_iter()
             .map(|s| {
                 s.split("   ")
-                    .map(|s| s.parse::<i32>().unwrap_or(0))
+                    .map(|s| s.trim().parse::<i32>().unwrap_or(0))
                     .collect::<Vec<i32>>()
             })
             .filter(|s| s.len() >= 2)
