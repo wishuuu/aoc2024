@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use crate::Args;
+
 #[macro_use]
 pub mod macros;
 
@@ -11,12 +13,18 @@ pub trait Day {
     fn part2(&self, input_path: String) -> String;
 }
 
+pub enum RunnerOption {
+    Task(Option<u8>),
+    Test(Option<u8>),
+}
+
 pub struct Runner {
     days: HashMap<u8, Box<dyn Day>>,
+    runner_option: RunnerOption,
 }
 
 impl Runner {
-    pub fn new() -> Self {
+    pub fn new(args: Args) -> Self {
         Self {
             days: [
                 (1u8, Box::new(day1::Day1 {}) as Box<dyn Day>),
@@ -24,11 +32,20 @@ impl Runner {
             ]
             .into_iter()
             .collect(),
+            runner_option: match (args.test, args.day) {
+                (true, x) => RunnerOption::Test(x),
+                (false, x) => RunnerOption::Task(x),
+            },
         }
     }
     pub fn run(&self) {
-        for (day, _) in self.days.iter() {
-            self.run_day(*day);
+        match &self.runner_option {
+            RunnerOption::Task(Some(day)) | RunnerOption::Test(Some(day)) => self.run_day(*day),
+            RunnerOption::Task(None) | RunnerOption::Test(None) => {
+                for (day, _) in self.days.iter() {
+                    self.run_day(*day);
+                }
+            }
         }
     }
     pub fn run_day(&self, day: u8) {
@@ -40,8 +57,30 @@ impl Runner {
     pub fn run_day_part(&self, d: u8, part: u8) {
         if let Some(day) = self.days.get(&d) {
             match part {
-                1 => println!("Part 1: {}", day.part1(format!("inputs/d{}.task", d))),
-                2 => println!("Part 2: {}", day.part2(format!("inputs/d{}.task", d))),
+                1 => println!(
+                    "Part 1: {}",
+                    day.part1(format!(
+                        "inputs/d{}.{}",
+                        d,
+                        if let RunnerOption::Test(_) = self.runner_option {
+                            "test"
+                        } else {
+                            "task"
+                        }
+                    ))
+                ),
+                2 => println!(
+                    "Part 2: {}",
+                    day.part2(format!(
+                        "inputs/d{}.{}",
+                        d,
+                        if let RunnerOption::Test(_) = self.runner_option {
+                            "test"
+                        } else {
+                            "task"
+                        }
+                    ))
+                ),
                 _ => println!("Invalid part number"),
             }
         } else {

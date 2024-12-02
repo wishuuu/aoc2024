@@ -1,5 +1,5 @@
 macro_rules! generate_day_tests {
-    ($day_num:expr, $part1_expected:expr, $part2_expected:expr) => {
+    ($day_num:expr, $part1_test_expected:expr, $part2_test_expected:expr, $part1_task_expected:expr, $part2_task_expected:expr) => {
         #[cfg(test)]
         pub mod tests {
             use super::*;
@@ -9,7 +9,7 @@ macro_rules! generate_day_tests {
                 let day = paste::paste! { [<Day $day_num>] {} };
                 assert_eq!(
                     day.part1(format!("inputs/d{}.test", $day_num)),
-                    $part1_expected.to_string()
+                    $part1_test_expected.to_string()
                 );
             }
 
@@ -18,7 +18,25 @@ macro_rules! generate_day_tests {
                 let day = paste::paste! { [<Day $day_num>] {} };
                 assert_eq!(
                     day.part2(format!("inputs/d{}.test", $day_num)),
-                    $part2_expected.to_string()
+                    $part2_test_expected.to_string()
+                );
+            }
+
+            #[test]
+            fn task_part1() {
+                let day = paste::paste! { [<Day $day_num>] {} };
+                assert_eq!(
+                    day.part1(format!("inputs/d{}.task", $day_num)),
+                    $part1_task_expected.to_string()
+                );
+            }
+
+            #[test]
+            fn task_part2() {
+                let day = paste::paste! { [<Day $day_num>] {} };
+                assert_eq!(
+                    day.part2(format!("inputs/d{}.task", $day_num)),
+                    $part2_task_expected.to_string()
                 );
             }
         }

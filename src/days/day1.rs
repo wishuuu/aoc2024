@@ -48,4 +48,4 @@ impl Day for Day1 {
     }
 }
 
-generate_day_tests!(1, "11", "31");
+generate_day_tests!(1, "11", "31", "2176849", "23384288");

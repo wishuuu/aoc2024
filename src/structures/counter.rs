@@ -4,6 +4,7 @@ pub struct Counter<T: Eq + std::hash::Hash> {
     map: HashMap<T, u32>,
 }
 
+#[allow(dead_code)]
 impl<T: Eq + std::hash::Hash> Counter<T> {
     pub fn new() -> Self {
         Counter {
