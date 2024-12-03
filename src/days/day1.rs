@@ -1,4 +1,4 @@
-use crate::{structures::counter::Counter, utils::file::read_file};
+use crate::{structures::counter::Counter, utils::file::read_lines};
 
 use super::Day;
 
@@ -7,7 +7,7 @@ pub struct Day1 {}
 
 impl Day1 {
     fn get_data(&self, path: String) -> (Vec<i32>, Vec<i32>) {
-        let data = read_file(path);
+        let data = read_lines(path);
 
         let (d1, d2): (Vec<_>, Vec<_>) = data
             .into_iter()

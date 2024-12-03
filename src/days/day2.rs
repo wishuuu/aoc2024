@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use crate::utils::file::read_file;
+use crate::utils::file::read_lines;
 
 use super::Day;
 
@@ -9,7 +9,7 @@ pub struct Day2 {}
 
 impl Day2 {
     fn get_data(&self, path: String) -> Vec<Vec<i32>> {
-        let data = read_file(path);
+        let data = read_lines(path);
 
         data.into_iter()
             .map(|s| {
