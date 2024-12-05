@@ -8,6 +8,7 @@ pub mod macros;
 pub mod day1;
 pub mod day2;
 pub mod day3;
+pub mod day4;
 
 pub trait Day {
     fn part1(&self, input_path: String) -> String;
@@ -31,6 +32,7 @@ impl Runner {
                 (1u8, Box::new(day1::Day1 {}) as Box<dyn Day>),
                 (2u8, Box::new(day2::Day2 {}) as Box<dyn Day>),
                 (3u8, Box::new(day3::Day3 {}) as Box<dyn Day>),
+                (4u8, Box::new(day4::Day4 {}) as Box<dyn Day>),
             ]
             .into_iter()
             .collect(),
