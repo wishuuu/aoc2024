@@ -4,17 +4,17 @@ use super::Day;
 
 pub struct Day5 {}
 
+#[derive(Debug)]
 struct Rule {
     before: usize,
     after: usize,
 }
 
-impl Day for Day5 {
-    fn part1(&self, input_path: String) -> String {
-        let lines = read_lines(input_path);
+impl Day5 {
+    fn read_data(&self, file_path: &str) -> (Vec<Rule>, Vec<Vec<usize>>) {
+        let lines = read_lines(file_path.to_owned());
         let mut rules: Vec<Rule> = Vec::new();
         let mut sequances: Vec<Vec<usize>> = Vec::new();
-
         lines.iter().for_each(|line| {
             if line.contains("|") {
                 let parts: Vec<&str> = line.split("|").collect();
@@ -30,6 +30,13 @@ impl Day for Day5 {
                 );
             }
         });
+        (rules, sequances)
+    }
+}
+
+impl Day for Day5 {
+    fn part1(&self, input_path: String) -> String {
+        let (rules, sequances) = self.read_data(&input_path);
 
         let mut sum = 0;
         sequances.iter().for_each(|sequance| {
@@ -52,8 +59,37 @@ impl Day for Day5 {
     }
 
     fn part2(&self, input_path: String) -> String {
-        todo!()
+        let (rules, sequances) = self.read_data(&input_path);
+        let mut sum = 0;
+
+        sequances
+            .iter()
+            .filter(|sequance| {
+                rules.iter().any(|rule| {
+                    match (
+                        sequance.iter().position(|&r| r == rule.before),
+                        sequance.iter().position(|&r| r == rule.after),
+                    ) {
+                        (Some(before), Some(after)) => before > after,
+                        _ => false,
+                    }
+                })
+            })
+            .for_each(|sequance| {
+                let mut seq = sequance.clone();
+                for i in 0..seq.len() {
+                    for j in 0..(seq.len() - i - 1) {
+                        rules.iter().for_each(|rule| {
+                            if seq[j] == rule.after && seq[j + 1] == rule.before {
+                                seq.swap(j, j + 1);
+                            }
+                        });
+                    }
+                }
+                sum += seq[seq.len() / 2];
+            });
+        sum.to_string()
     }
 }
 
-generate_day_tests!(5, "143", "123", "3608", "");
+generate_day_tests!(5, "143", "123", "3608", "4922");
